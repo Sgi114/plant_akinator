@@ -33,6 +33,8 @@ cursor.execute(
     description TEXT)
     """, table)
 
+# test_scraping.scraping()
+
 for viola in viola_list:
     cursor.execute("INSERT INTO plant (name,botanical_name,common_name,flower_color,blooming_period ,leaf_shape,leaf_edge,leaf_arrangement ,leaf_surface,leaf_texture height ,habitat ,distribution ) VALUES (%s, %s)", (viola['名前'], viola['説明']))
 conn.commit()
@@ -72,8 +74,7 @@ def answer():
             'answers': [answer],
             next_question = questions[question_index + 1]}
             )
-
-@app.route('/Search_name')
+    @app.route('/Search_name')
 def Search_name():
     return render_template(
         'Search_name.html'
