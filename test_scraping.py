@@ -30,7 +30,7 @@ def scraping():
         if("親から検索" in soup.text):
             continue
 
-        viola = {}
+        violas = {}
         plants = []
         table = soup.find('table', summary="解説枠")
 
@@ -44,13 +44,13 @@ def scraping():
         for tr in trs:
             for th in tr.find_all('th'):  # trタグからthタグを探す
                 if not th.get('rowspan'):
-                    viola[th.text] = ''
+                    violas[th.text] = ''
             for td in tr.find_all('td'):  # trタグからtdタグを探す
                 text = str(td.text).replace("\t", "").replace(
                     "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
                 text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
-                viola[th.text] = text
-        print(viola)
+                violas[th.text] = text
+        print(violas)
         time.sleep(0.1)  # 連続アクセス防止
     # 折りたたむ
 
