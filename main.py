@@ -64,6 +64,25 @@ if __name__ == '__main__': # debugを行う
 
 @app.route('/Akinator')
 def Akinator():
+    questions = []
+    for viola in violas[]:
+        questions.append('茎の形態は'+ viola['茎の形態'] + 'ですか？')
+        questions.append(viola['国内'] + 'に生息していますか？')
+        questions.append(viola['補足'] + 'ですか？')
+        questions.append('花の形状は' + viola['形状'] + 'ですか？')
+        questions.append('花の時期は'+ viola['色'] + 'ですか？')
+        questions.append('距の長さは' + viola['距'] + 'ですか？')
+        questions.append('花の時期は' + viola['花期'] + 'ですか？')
+        questions.append('花柱は' + viola['花柱'] + 'ですか？')
+        questions.append('花について' + viola['補足'])
+        questions.append('葉の形は' + viola['形状'] + 'ですか？')
+        questions.append('葉の色は' + viola['色'] + 'ですか？')
+        questions.append('花について' + viola['補足'] + 'ですか？')
+        questions.append('種の形状は' + viola['形状'] + 'ですか？')
+        questions.append('種の色は' + viola['色'] + 'ですか？')
+        questions.append('種について' + viola['補足'])
+        questions.append('根は' + viola['根の特徴'] + 'ですか？')
+        questions.append(viola['その他'] + 'ですか？')        
     question = questions[0]
     return render_template('Akinator.html',question=question)
 

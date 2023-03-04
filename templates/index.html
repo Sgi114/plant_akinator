@@ -5,15 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plant Akinator</title>
+    <link rel="stylesheet" type="text/css" href="css/5-1-13.css">
 </head>
 <body>
-    <h1>Plant Akinator<h1>
-        <h2>menu<h2>
-            <a href="{{ url_for('Akinator')}}">Akinator(Search from features)</a>
-            <br><a href="{{ url_for('Search_name')}}">Search from name</a>
-            <br><a href="{{ url_for('Add_plant')}}">Add plant DB</a>
-
-
-
+    <div class="openbtn"><span></span><span></span><span></span></div>
+    <nav id="g-nav">
+    <ul>
+    <li><a href="{{ url_for('Akinator')}}">Akinator(Search from features)</a></li> 
+    <li><a href="{{ url_for('Search_name')}}">Search from name</a></li> 
+    <li><a href="{{ url_for('Add_plant')}}">Add plant DB</a></li> 
+    <li><a href="#">Contact</a></li> 
+    </ul>
+    </div>
+    </nav>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <!--自作のJS-->
+    <script src="js/5-1-13.js"></script>
 </body>
 </html>
