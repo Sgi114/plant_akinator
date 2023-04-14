@@ -1,7 +1,13 @@
-from plant_akinator import app
-from flask import render_template
+# TODO: 使われていないから削除する？
+# from plant_akinator import app
+# from flask import render_template
+# import mysql.connector
+
+from flask import Flask, render_template,request
+import MySQLdb
 import test_scraping
-import mysql-connector-python
+
+app = Flask(__name__)
 
 cnx = MySQLdb.connect(
     host='localhost',
@@ -35,7 +41,7 @@ cursor.execute(
 
 for viola in viola_list:
     cursor.execute("INSERT INTO plant (name,botanical_name,common_name,flower_color,blooming_period ,leaf_shape,leaf_edge,leaf_arrangement ,leaf_surface,leaf_texture height ,habitat ,distribution ) VALUES (%s, %s)", (viola['名前'], viola['説明']))
-conn.commit()
+cnx.commit()
 
 @app.route('/') # はじめの処理
 def index():
@@ -55,7 +61,7 @@ def Akinator():
 # 回答を受け取って、次の質問を表示
 @app.route('/answer', methods=['POST'])
 def answer():
-    answer = request.form['answer']
+    answer = request.args.get("answer")
 
     # ここで、回答に応じて次の質問を選択し、または絞り込んだ結果を表示するロジックを実装する
     # また、データベースから絞り込んだ結果を取得する
