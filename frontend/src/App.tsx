@@ -8,6 +8,9 @@ export const App = () => {
   const [newMessage, setNewMessage] = useState("");
 
   const handleMessageSubmit = () => {
+    if (!newMessage.length) {
+      return;
+    }
     setMessageList((prev) => [...prev, newMessage]);
     setNewMessage("");
   };
