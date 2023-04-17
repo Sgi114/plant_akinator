@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import re
+import json
 
 
 def scraping():
@@ -22,6 +23,7 @@ def scraping():
     name_url_list = list(set(name_url_list))
 
     for name in name_url_list:
+        name="http://www.io-net.com/violet/violet2/ainu_tatitubo.htm"  # デバッグ用
         print(name)
         ac_url = requests.get(name)
         ac_url.encoding = ac_url.apparent_encoding  # 呪文
@@ -45,13 +47,23 @@ def scraping():
         for tr in trs:
             for th in tr.find_all('th'):  # trタグからthタグを探す
                 if not th.get('rowspan'):
-                    violas[th.text] = ''
+                    th_colspan = tr.find('th', {'colspan': '2'})  # colspan属性が2のthタグを探す  
+                    violas[th_colspan,th.text] = ''
             for td in tr.find_all('td'):  # trタグからtdタグを探す
                 text = str(td.text).replace("\t", "").replace(
                     "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
-                text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
+                text=text.replace("\r","").replace("\n","")
+                # text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
                 violas[th.text] = text
         print(violas) 
         time.sleep(0.1)  # 連続アクセス防止
+        break # デバッグ用
     # 折りたたむ
     return violas
+
+if __name__ == "__main__":
+    violas = scraping()
+    json_text=json.dumps(violas).encode().decode("unicode-escape")
+    with open('violas.json', 'w',encoding="utf-8") as f:
+        f.write(json_text)
+    print("完了")
