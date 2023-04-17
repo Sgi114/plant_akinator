@@ -12,15 +12,15 @@ def akinator():
     # MySQLのクエリを生成して絞り込み
     if answer == 'Yes':
         # 無茎種として絞り込み
-        cursor.execute("SELECT * FROM flowers WHERE stem_type = '無茎種'")
+        cursor.execute("create view akinator as SELECT * FROM flowers WHERE stem_type = '無茎種'")
     elif answer == 'No':
         # 有茎種として絞り込み
-        cursor.execute("SELECT * FROM flowers WHERE stem_type = '有茎種'")
+        cursor.execute("create view akinator as SELECT * FROM flowers WHERE stem_type = '有茎種'")
     result = cursor.fetchall()
 
     def akinator_seach():
         # sqlから要素をランダムに1つ取得
-        cursor.execute("SELECT * FROM flowers ORDER BY RAND() LIMIT 0 OFFSET 0")
+        cursor.execute("SELECT * FROM flowers ORDER BY RAND() LIMIT 0 OFFSET FLoor(RAND() * 6)rows")
         question = cursor.fetchone()
         if answer == 'Yes':
             cursor.execute("create view Akinator as select * from flowers where like %s", ('%'+question+'%',))
