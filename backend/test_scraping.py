@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import time
 import re
 
+
 def scraping():
     name_url = requests.get("http://www.io-net.com/violet/abcindex.htm")
     name_url.encoding = name_url.apparent_encoding  # 呪文
@@ -50,7 +51,7 @@ def scraping():
                     "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
                 text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
                 violas[th.text] = text
-        print(violas)
+        print(violas) 
         time.sleep(0.1)  # 連続アクセス防止
     # 折りたたむ
-
+    return violas
