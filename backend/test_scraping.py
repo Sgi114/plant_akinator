@@ -53,7 +53,16 @@ def scraping():
                         th_colspan = th
                     else:
                         pass
-            violas[th_colspan.text, th.text] = ''
+
+                    if th_colspan == th:
+                        key = th.text
+                    elif th_colspan != th:
+                        key = (th_colspan.text, th.text)
+                    else:
+                        key = th.text
+        
+                    violas[key] = ''
+            
 
                            
 
@@ -62,7 +71,7 @@ def scraping():
                     "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
                 text=text.replace("\r","").replace("\n","")
                 # text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
-                violas[th_colspan.text, th.text] = text
+                violas[key] = text
         print(violas) 
         time.sleep(0.1)  # 連続アクセス防止
         break # デバッグ用
