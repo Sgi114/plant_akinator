@@ -57,7 +57,7 @@ def scraping():
                     if th_colspan == th:
                         key = th.text
                     elif th_colspan != th:
-                        key = (th_colspan.text, th.text)
+                        key = (th_colspan.text+'_'+th.text)
                     else:
                         key = th.text
         
