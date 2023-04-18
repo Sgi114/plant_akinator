@@ -46,12 +46,14 @@ def scraping():
 
         for tr in trs:
             for th in tr.find_all('th'):  # trタグからthタグを探す
-                if not th.get('rowspan'):
+                #if not th.get('rowspan'):
                     if th.has_attr('colspan'):
                         th_colspan = tr.find('th', {'colspan': '2'})
+                    elif th.has_attr('rowspan'):
+                        th_colspan = th
                     else:
                         pass
-                violas[th_colspan.text, th.text] = ''
+            violas[th_colspan.text, th.text] = ''
 
                            
 
