@@ -23,14 +23,14 @@ def scraping():
     name_url_list = list(set(name_url_list))
 
     for name in name_url_list:
-        name="http://www.io-net.com/violet/violet2/ainu_tatitubo.htm"  # デバッグ用
+        name = "http://www.io-net.com/violet/violet2/ainu_tatitubo.htm"  # デバッグ用
         print(name)
         ac_url = requests.get(name)
         ac_url.encoding = ac_url.apparent_encoding  # 呪文
         soup = BeautifulSoup(ac_url.text, 'html.parser')
 
         # リンク集ページの場合はスキップ
-        if("親から検索" in soup.text):
+        if ("親から検索" in soup.text):
             continue
 
         violas = {}
@@ -38,7 +38,7 @@ def scraping():
         table = soup.find('table', summary="解説枠")
 
         # 解説枠の表が存在しない場合はスキップ
-        if(table == None):
+        if (table == None):
             continue
         tbody = table.find('tbody')
         trs = table.find_all(
@@ -46,41 +46,39 @@ def scraping():
 
         for tr in trs:
             for th in tr.find_all('th'):  # trタグからthタグを探す
-                #if not th.get('rowspan'):
-                    if th.has_attr('colspan'):
-                        th_colspan = tr.find('th', {'colspan': '2'})
-                    elif th.has_attr('rowspan'):
-                        th_colspan = th
-                    else:
-                        pass
+                # if not th.get('rowspan'):
+                if th.has_attr('colspan'):
+                    th_colspan = tr.find('th', {'colspan': '2'})
+                elif th.has_attr('rowspan'):
+                    th_colspan = th
+                else:
+                    pass
 
-                    if th_colspan == th:
-                        key = th.text
-                    elif th_colspan != th:
-                        key = (th_colspan.text+'_'+th.text)
-                    else:
-                        key = th.text
-        
-                    violas[key] = ''
-            
+                if th_colspan == th:
+                    key = th.text
+                elif th_colspan != th:
+                    key = (th_colspan.text+'_'+th.text)
+                else:
+                    key = th.text
 
-                           
+                violas[key] = ''
 
             for td in tr.find_all('td'):  # trタグからtdタグを探す
                 text = str(td.text).replace("\t", "").replace(
                     "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
-                text=text.replace("\r","").replace("\n","")
+                text = text.replace("\r", "").replace("\n", "")
                 # text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
                 violas[key] = text
-        print(violas) 
+        print(violas)
         time.sleep(0.1)  # 連続アクセス防止
-        break # デバッグ用
+        break  # デバッグ用
     # 折りたたむ
     return violas
 
+
 if __name__ == "__main__":
     violas = scraping()
-    json_text=json.dumps(violas).encode().decode("unicode-escape")
-    with open('violas.json', 'w',encoding="utf-8") as f:
+    json_text = json.dumps(violas).encode().decode("unicode-escape")
+    with open('violas.json', 'w', encoding="utf-8") as f:
         f.write(json_text)
     print("完了")
