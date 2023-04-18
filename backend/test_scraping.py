@@ -12,20 +12,20 @@ def scraping():
     soup = BeautifulSoup(name_url.text, 'html.parser')
     tags = soup.find_all('td', class_='white')
 
-    name_url_list = []
+    url_list = []
     for tag in tags:  # 一つづつ取り出した〇〇〇クラスの中の"a"タグの情報を取得
         for a in tag.select("a"):  # aタグの中の　href="リンク先のURL"　というようなhref=のあとの情報を取得する
             url = a.get('href')
             url_new = url[1:]
-            name_url_list.append("http://www.io-net.com/violet"+url_new)
+            url_list.append("http://www.io-net.com/violet"+url_new)
 
     # URLの重複を削除
-    name_url_list = list(set(name_url_list))
+    url_list = list(set(url_list))
 
-    for name in name_url_list:
-        name = "http://www.io-net.com/violet/violet1/sumire.htm"  # NOTE: デバッグ用
-        print(name)
-        ac_url = requests.get(name)
+    for url in url_list:
+        url = "http://www.io-net.com/violet/violet1/sumire.htm"  # NOTE: デバッグ用
+        print(url)
+        ac_url = requests.get(url)
         ac_url.encoding = ac_url.apparent_encoding  # 呪文
         soup = BeautifulSoup(ac_url.text, 'html.parser')
 
@@ -33,7 +33,7 @@ def scraping():
         if ("親から検索" in soup.text):
             continue
 
-        violas = {}
+        violas = {"url": url}
         table = soup.find('table', summary="解説枠")
         th_colspan = None
         th_rowspan = None
