@@ -23,7 +23,7 @@ def scraping():
     name_url_list = list(set(name_url_list))
 
     for name in name_url_list:
-        name = "http://www.io-net.com/violet/violet2/ainu_tatitubo.htm"  # デバッグ用
+        name = "http://www.io-net.com/violet/violet1/sumire.htm"  # NOTE: デバッグ用
         print(name)
         ac_url = requests.get(name)
         ac_url.encoding = ac_url.apparent_encoding  # 呪文
@@ -71,7 +71,7 @@ def scraping():
                 violas[key] = text
         print(violas)
         time.sleep(0.1)  # 連続アクセス防止
-        break  # デバッグ用
+        break  # NOTE: デバッグ用
     # 折りたたむ
     return violas
 
