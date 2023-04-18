@@ -34,7 +34,6 @@ def scraping():
             continue
 
         violas = {}
-        plants = []
         table = soup.find('table', summary="解説枠")
         th_colspan = None
         th_rowspan = None
@@ -50,7 +49,7 @@ def scraping():
             for th in tr.find_all('th'):  # trタグからthタグを探す
                 # if not th.get('rowspan'):
                 if th.has_attr('colspan'):
-                    th_colspan = tr.find('th', {'colspan': '2'})
+                    th_colspan = th
                     th_rowspan = None
                 elif th.has_attr('rowspan'):
                     th_colspan = None
