@@ -1,3 +1,5 @@
 from flask import Flask
 app = Flask(__name__)
-import plant_akinator.main
+
+# import backend.main as main
+# main(app)
