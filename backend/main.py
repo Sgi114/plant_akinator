@@ -1,13 +1,12 @@
 from flask import Flask, render_template,request
 import test_scraping
 import MySQLdb
-import app
 import akinator
 import mysql
 
 cnx,cursor=mysql.setup()
 
-# app = Flask(__name__)
+app = Flask(__name__)
 
 # table = 'plant'
 # cursor.execute("DROP TABLE IF EXISTS `%s`;", table)
