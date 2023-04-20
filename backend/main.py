@@ -4,9 +4,9 @@ import MySQLdb
 import akinator
 import mysql
 
-cnx,cursor=mysql.setup()
 
 app = Flask(__name__)
+db=mysql.setup(app)
 
 # table = 'plant'
 # cursor.execute("DROP TABLE IF EXISTS `%s`;", table)
@@ -59,7 +59,7 @@ if __name__ == '__main__': # debugを行う
 
 @app.route('/akinator')
 def flask_akinator():
-    akinator.akinator()
+    akinator.akinator(db)
     return 
 
 @app.route('/Search_name')
@@ -77,6 +77,5 @@ def Add_plant():
 @app.route('/Search_name', methods=['POST'])
 def Search_name():
     name = request.form['name']
-    cursor.execute("SELECT * FROM flowers WHERE name = %s", (name,))
-    result = cursor.fetchall()
+    result = db.execute("SELECT * FROM flowers WHERE name = %s", (name,))
     return render_template('result.html', result=result)
