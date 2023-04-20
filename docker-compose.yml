@@ -1,0 +1,53 @@
+version: '3'
+services:
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: plant_akinator
+      MYSQL_USER: sgi
+      MYSQL_PASSWORD: sgi114
+      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      - db-store:/var/lib/mysql
+      - ./db/logs:/var/log/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=plant_akinator
+      - DB_USER=sgi
+      - DB_PASS=sgi114
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOSTS=db
+      - PMA_USER=sgi
+      - PMA_PASSWORD=sgi114
+    ports:
+      - "8001:80"
+    volumes:
+      - ./phpmyadmin/sessions:/sessions
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:4000"
+    depends_on:
+      - backend
+volumes:
+  db-store:

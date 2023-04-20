@@ -1,7 +1,7 @@
 from flask import Flask, render_template,request
-import backend.test_scraping as test_scraping
+import test_scraping
 import MySQLdb
-from backend import app
+import app
 import akinator
 import mysql
 

@@ -1,3 +1,5 @@
 Flask
 mysqlclient
 mysql-connector-python
+BeautifulSoup4
+requests
