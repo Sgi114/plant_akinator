@@ -3,6 +3,9 @@ import backend.test_scraping as test_scraping
 import MySQLdb
 from backend import app
 import akinator
+import mysql
+
+cnx,cursor=mysql.setup()
 
 # app = Flask(__name__)
 
@@ -51,11 +54,9 @@ import akinator
 def index():
     return render_template('index.html') 
 
-
 if __name__ == '__main__': # debugを行う
     app.debug = True
     app.run(host='localhost')
-
 
 @app.route('/akinator')
 def flask_akinator():
@@ -73,7 +74,6 @@ def Add_plant():
     return render_template(
         'Add_plant.html'
     )
-
 
 @app.route('/Search_name', methods=['POST'])
 def Search_name():

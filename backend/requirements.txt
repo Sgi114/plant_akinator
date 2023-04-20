@@ -1,0 +1,3 @@
+Flask
+mysqlclient
+mysql-connector-python
