@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request
+from flask import Flask, render_template, request
 
 
 def akinator(db):
@@ -7,10 +7,12 @@ def akinator(db):
     # MySQLのクエリを生成して絞り込み
     if answer == 'Yes':
         # 無茎種として絞り込み
-        db.execute("create view akinator as SELECT * FROM flowers WHERE stem_type = '無茎種'")
+        db.execute(
+            "create view akinator as SELECT * FROM flowers WHERE stem_type = '無茎種'")
     elif answer == 'No':
         # 有茎種として絞り込み
-        result=db.execute("create view akinator as SELECT * FROM flowers WHERE stem_type = '有茎種'")
+        result = db.execute(
+            "create view akinator as SELECT * FROM flowers WHERE stem_type = '有茎種'")
 
 # FIXME: 使い方不明
 # def akinator_seach(db):
@@ -32,5 +34,5 @@ def akinator(db):
 #     elif len(result) == 1:
 #         result = cursor.fetchone()
 #         return result
-#     return render_template('Akinator.html',first_question=first_question,question 
+#     return render_template('Akinator.html',first_question=first_question,question
 #                             =question,result=result)
