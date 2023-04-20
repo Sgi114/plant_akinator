@@ -1,8 +1,7 @@
-from flask import Flask, render_template,request
-import test_scraping
-import MySQLdb
+import datetime
 import akinator
 import mysql
+from flask import Flask, render_template,request
 
 
 app = Flask(__name__)
@@ -49,33 +48,43 @@ db=mysql.setup(app)
 #     (viola['分類'], viola['基本種'], viola['変種'],viola['品種'],viola['異名'],viola['由来'],viola['外語一般名'],viola['茎の形態'] , viola['国内'], viola['海外'], viola['補足'], viola['形状'], viola['色'], viola['距'], viola['花期'], viola['花柱'], viola['補足'], viola['形状'], viola['色'], viola['補足'], viola['形状'], viola['色'], viola['補足'], viola['根の特徴'], viola['絶滅危惧種'], viola['基準標本'], viola['その他']))
 # cnx.commit()
 
+
+# TODO: 追々必要
+# CORS(app, origins=['http://localhost', 'http://localhost:4000'])
+
+
 @app.route('/') # はじめの処理
 def index():
-    return render_template('index.html') 
-
-if __name__ == '__main__': # debugを行う
-    app.debug = True
-    app.run(host='localhost')
+    return render_template('index.html')
 
 @app.route('/akinator')
 def flask_akinator():
     akinator.akinator(db)
     return 
 
-@app.route('/Search_name')
-def Search_name():
-    return render_template(
-        'Search_name.html',
-    )
-
-@app.route('/Add_plant')
-def Add_plant():
+@app.route('/add_plant')
+def add_plant():
     return render_template(
         'Add_plant.html'
     )
 
-@app.route('/Search_name', methods=['POST'])
-def Search_name():
+# @app.route('/search_name')
+# def search_name():
+#     return render_template(
+#         'Search_name.html',
+#     )
+
+@app.route('/search_name', methods=['POST'])
+def search_name():
     name = request.form['name']
     result = db.execute("SELECT * FROM flowers WHERE name = %s", (name,))
     return render_template('result.html', result=result)
+
+@app.route('/check')
+def check():
+    dt_now = datetime.datetime.now()
+    return 'Working! '+str(dt_now)
+
+if __name__ == '__main__':
+    app.debug = True  # debugを行う
+    app.run(host='0.0.0.0', port=8000)
