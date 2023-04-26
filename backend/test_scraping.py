@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import json
+import re
+import minify_html
 
 
 def scraping():
@@ -67,9 +69,15 @@ def scraping():
                 violas[key] = ''
 
             for td in tr.find_all('td'):  # trタグからtdタグを探す
-                text = str(td.text).replace("\t", "").replace(
+                content_html = minify_html.minify(str(td))
+                # 正規表現で改行タグをすべて「\n」に置き換え
+                content_text = re.sub(r'<br\s*?/?>', '\\n', content_html)
+                # タグをすべて削除
+                content_text = re.sub(r'<.*?>', '', content_text)
+                # 整形
+                text = content_text.replace("\t", "").replace(
                     "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
-                text = text.replace("\r", "").replace("\n", "")
+                # text = text.replace("\r", "").replace("\n", "")
                 # text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
                 violas[key] = text
         print(violas)
@@ -81,7 +89,7 @@ def scraping():
 
 if __name__ == "__main__":
     violas = scraping()
-    json_text = json.dumps(violas).encode().decode("unicode-escape")
+    json_text = json.dumps(violas, ensure_ascii=False)
     with open('violas.json', 'w', encoding="utf-8") as f:
         f.write(json_text)
     print("完了")
