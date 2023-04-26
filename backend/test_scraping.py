@@ -23,6 +23,9 @@ def scraping():
     # URLの重複を削除
     url_list = list(set(url_list))
 
+    viola_list = []
+    count = 0
+
     for url in url_list:
         url = "http://www.io-net.com/violet/violet1/sumire.htm"  # NOTE: デバッグ用
         print(url)
@@ -34,7 +37,7 @@ def scraping():
         if ("親から検索" in soup.text):
             continue
 
-        violas = {"url": url}
+        viola = {"url": url}
         table = soup.find('table', summary="解説枠")
         th_colspan = None
         th_rowspan = None
@@ -66,7 +69,7 @@ def scraping():
                 if (key is None):
                     continue
 
-                violas[key] = ''
+                viola[key] = ''
 
             for td in tr.find_all('td'):  # trタグからtdタグを探す
                 content_html = minify_html.minify(str(td))
@@ -79,17 +82,20 @@ def scraping():
                     "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
                 # text = text.replace("\r", "").replace("\n", "")
                 # text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
-                violas[key] = text
-        print(violas)
+                viola[key] = text
+        viola_list.append(viola)
+        count += 1
+        print("✅ 完了: "+url+"（"+str(count)+"/"+str(len(url_list))+"）")
+        if (count == 1):
+            break  # デバッグ用
         time.sleep(0.1)  # 連続アクセス防止
-        break  # NOTE: デバッグ用
     # 折りたたむ
-    return violas
+    return viola_list
 
 
 if __name__ == "__main__":
-    violas = scraping()
-    json_text = json.dumps(violas, ensure_ascii=False)
+    viola_list = scraping()
+    json_text = json.dumps(viola_list, ensure_ascii=False)
     with open('violas.json', 'w', encoding="utf-8") as f:
         f.write(json_text)
     print("完了")
