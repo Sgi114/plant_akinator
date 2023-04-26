@@ -30,7 +30,6 @@ def scraping():
 
     for url in url_list:
         url = "http://www.io-net.com/violet/violet1/sumire.htm"  # NOTE: デバッグ用
-        print(url)
         ac_url = requests.get(url)
         ac_url.encoding = ac_url.apparent_encoding  # 呪文
         soup = BeautifulSoup(ac_url.text, 'html.parser')
