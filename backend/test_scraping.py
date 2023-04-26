@@ -90,7 +90,7 @@ def scraping():
                         if (span_tag != None and span_tag.has_attr("class")):
                             viola[key+"_"+span_tag["class"][0]] = span_tag.text
                         else:
-                            viola[key+"_"+name_language] = str(child).strip()
+                            viola[key+"_"+name_language] = str(soup.text).strip()
                 else:
                     content_html = minify_html.minify(str(td))
                     # 正規表現で改行タグをすべて「\n」に置き換え
