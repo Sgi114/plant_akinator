@@ -5,6 +5,7 @@ import json
 import re
 import minify_html
 import py3langid
+import utils
 
 
 def scraping():
@@ -101,13 +102,13 @@ def scraping():
                         "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
                     text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
                     viola[key] = text
+        viola=utils.remove_empty_keys(viola)
         viola_list.append(viola)
         count += 1
         print("✅ 完了: "+url+"（"+str(count)+"/"+str(len(url_list))+"）")
         if (count == 1):
             break  # デバッグ用
         time.sleep(0.1)  # 連続アクセス防止
-    # 折りたたむ
     return viola_list
 
 
