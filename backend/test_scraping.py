@@ -52,7 +52,6 @@ def scraping():
 
         for tr in trs:
             for th in tr.find_all('th'):  # trタグからthタグを探す
-                # if not th.get('rowspan'):
                 if th.has_attr('colspan'):
                     th_colspan = th
                     th_rowspan = None
@@ -69,8 +68,6 @@ def scraping():
 
                 if (key is None):
                     continue
-
-                # viola[key] = ''
 
             for td in tr.find_all('td'):  # trタグからtdタグを探す
                 name_language = None
@@ -93,12 +90,6 @@ def scraping():
                             viola[key+"_"+span_tag["class"][0]] = span_tag.text
                         else:
                             viola[key+"_"+name_language] = str(child).strip()
-                        # if (span_tag != None):
-                        #     viola[key+"_"+span_tag["class"][0]] = span_tag.text
-                        # elif (index == 0):
-                        #     viola[key+"_ja"] = str(child).strip()
-                        # else:
-                        #     viola[key+"_en"] = str(child).strip()
                 else:
                     content_html = minify_html.minify(str(td))
                     # 正規表現で改行タグをすべて「\n」に置き換え
@@ -108,8 +99,7 @@ def scraping():
                     # 整形
                     text = content_text.replace("\t", "").replace(
                         "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
-                    # text = text.replace("\r", "").replace("\n", "")
-                    # text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
+                    text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
                     viola[key] = text
         viola_list.append(viola)
         count += 1
