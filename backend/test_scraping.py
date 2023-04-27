@@ -6,6 +6,7 @@ import re
 import minify_html
 import py3langid
 import utils
+from urllib.parse import urljoin
 
 
 def scraping():
@@ -41,7 +42,18 @@ def scraping():
         # 日本語の植物名を抽出
         name_ja = soup.find("span", {"class": "japanese_name_large"}).text
 
-        viola = {"url": url, "name_ja": name_ja}
+        # 画像URLを抽出
+        image_url_list = []
+        image_div_list = soup.find_all("div", {"class": "column"})
+        for image_div in image_div_list:
+            image_list = image_div.find_all("img")
+            for image in image_list:
+                if (image == None):
+                    continue
+                image_url = urljoin(url, image["src"])
+                image_url_list.append(image_url)
+
+        viola = {"url": url, "name_ja": name_ja, "image_list": image_url_list}
         table = soup.find('table', summary="解説枠")
         th_colspan = None
         th_rowspan = None
