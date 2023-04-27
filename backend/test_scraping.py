@@ -38,7 +38,10 @@ def scraping():
         if ("親から検索" in soup.text):
             continue
 
-        viola = {"url": url}
+        # 日本語の植物名を抽出
+        name_ja = soup.find("span", {"class": "japanese_name_large"}).text
+
+        viola = {"url": url, "name_ja": name_ja}
         table = soup.find('table', summary="解説枠")
         th_colspan = None
         th_rowspan = None
@@ -76,20 +79,20 @@ def scraping():
                     span_tag = soup.find("span")
                     if(span_tag is None):
                         name_language = "ja"
-                        viola[key+"_"+name_language] = soup.text.strip()
                         continue
                     elif ((span_tag.has_attr("class") and span_tag["class"][0] == "scientific_name") or span_tag.has_attr("lang")):
                         name_language = py3langid.classify(span_tag.text)[0]
                         break
 
-                if (name_language is not None):
+                if (name_language is not None and name_language != "ja"):
                     for index, child in enumerate(td.children):
                         soup = BeautifulSoup(str(child), 'html.parser')
                         span_tag = soup.find("span")
                         if (span_tag != None and span_tag.has_attr("class")):
                             viola[key+"_"+span_tag["class"][0]] = span_tag.text
                         else:
-                            viola[key+"_"+name_language] = str(soup.text).strip()
+                            viola[key+"_" +
+                                  name_language] = str(soup.text).strip()
                 else:
                     content_html = minify_html.minify(str(td))
                     # 正規表現で改行タグをすべて「\n」に置き換え
@@ -101,7 +104,7 @@ def scraping():
                         "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
                     text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
                     viola[key] = text
-        viola=utils.remove_empty_keys(viola)
+        viola = utils.remove_empty_keys(viola)
         viola_list.append(viola)
         count += 1
         print("✅ 完了: "+url+"（"+str(count)+"/"+str(len(url_list))+"）")
