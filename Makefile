@@ -1,10 +1,8 @@
 .PHONY: setup start stop clean all-reset debug
 
 setup:
-	cd backend
-	pip install -r requirements.txt
-	cd ../frontend
-	npm i --force
+	pip install -r backend/requirements.txt
+	cd frontend && npm i --force
 
 start:
 	docker-compose up -d
