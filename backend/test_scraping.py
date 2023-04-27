@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import json
+import re
+import minify_html
+import py3langid
+import utils
 
 
 def scraping():
@@ -21,9 +25,11 @@ def scraping():
     # URLの重複を削除
     url_list = list(set(url_list))
 
+    viola_list = []
+    count = 0
+
     for url in url_list:
         url = "http://www.io-net.com/violet/violet1/sumire.htm"  # NOTE: デバッグ用
-        print(url)
         ac_url = requests.get(url)
         ac_url.encoding = ac_url.apparent_encoding  # 呪文
         soup = BeautifulSoup(ac_url.text, 'html.parser')
@@ -32,7 +38,10 @@ def scraping():
         if ("親から検索" in soup.text):
             continue
 
-        violas = {"url": url}
+        # 日本語の植物名を抽出
+        name_ja = soup.find("span", {"class": "japanese_name_large"}).text
+
+        viola = {"url": url, "name_ja": name_ja}
         table = soup.find('table', summary="解説枠")
         th_colspan = None
         th_rowspan = None
@@ -46,7 +55,6 @@ def scraping():
 
         for tr in trs:
             for th in tr.find_all('th'):  # trタグからthタグを探す
-                # if not th.get('rowspan'):
                 if th.has_attr('colspan'):
                     th_colspan = th
                     th_rowspan = None
@@ -64,24 +72,51 @@ def scraping():
                 if (key is None):
                     continue
 
-                violas[key] = ''
-
             for td in tr.find_all('td'):  # trタグからtdタグを探す
-                text = str(td.text).replace("\t", "").replace(
-                    "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
-                text = text.replace("\r", "").replace("\n", "")
-                # text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
-                violas[key] = text
-        print(violas)
+                name_language = None
+                for index, child in enumerate(td.children):
+                    soup = BeautifulSoup(str(child), 'html.parser')
+                    span_tag = soup.find("span")
+                    if(span_tag is None):
+                        name_language = "ja"
+                        continue
+                    elif ((span_tag.has_attr("class") and span_tag["class"][0] == "scientific_name") or span_tag.has_attr("lang")):
+                        name_language = py3langid.classify(span_tag.text)[0]
+                        break
+
+                if (name_language is not None and name_language != "ja"):
+                    for index, child in enumerate(td.children):
+                        soup = BeautifulSoup(str(child), 'html.parser')
+                        span_tag = soup.find("span")
+                        if (span_tag != None and span_tag.has_attr("class")):
+                            viola[key+"_"+span_tag["class"][0]] = span_tag.text
+                        else:
+                            viola[key+"_" +
+                                  name_language] = str(soup.text).strip()
+                else:
+                    content_html = minify_html.minify(str(td))
+                    # 正規表現で改行タグをすべて「\n」に置き換え
+                    content_text = re.sub(r'<br\s*?/?>', '\\n', content_html)
+                    # タグをすべて削除
+                    content_text = re.sub(r'<.*?>', '', content_text)
+                    # 整形
+                    text = content_text.replace("\t", "").replace(
+                        "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
+                    text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
+                    viola[key] = text
+        viola = utils.remove_empty_keys(viola)
+        viola_list.append(viola)
+        count += 1
+        print("✅ 完了: "+url+"（"+str(count)+"/"+str(len(url_list))+"）")
+        if (count == 1):
+            break  # デバッグ用
         time.sleep(0.1)  # 連続アクセス防止
-        break  # NOTE: デバッグ用
-    # 折りたたむ
-    return violas
+    return viola_list
 
 
 if __name__ == "__main__":
-    violas = scraping()
-    json_text = json.dumps(violas).encode().decode("unicode-escape")
+    viola_list = scraping()
+    json_text = json.dumps(viola_list, ensure_ascii=False)
     with open('violas.json', 'w', encoding="utf-8") as f:
         f.write(json_text)
     print("完了")
