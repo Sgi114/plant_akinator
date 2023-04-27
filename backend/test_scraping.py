@@ -30,7 +30,6 @@ def scraping():
     count = 0
 
     for url in url_list:
-        url = "http://www.io-net.com/violet/violet1/sumire.htm"  # NOTE: デバッグ用
         ac_url = requests.get(url)
         ac_url.encoding = ac_url.apparent_encoding  # 呪文
         soup = BeautifulSoup(ac_url.text, 'html.parser')
@@ -120,8 +119,6 @@ def scraping():
         viola_list.append(viola)
         count += 1
         print("✅ 完了: "+url+"（"+str(count)+"/"+str(len(url_list))+"）")
-        if (count == 1):
-            break  # デバッグ用
         time.sleep(0.1)  # 連続アクセス防止
     return viola_list
 
