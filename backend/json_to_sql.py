@@ -11,7 +11,11 @@ FILE_PATH_JSON = "violas.json"
 FILE_PATH_SQL = "violas.sql"
 
 
-result_sql_list = []
+result_sql_list = ["USE `plant_akinator`;",
+                   "SET CHARSET UTF8;",
+                   "SET CHARACTER_SET_CLIENT = utf8;",
+                   "SET CHARACTER_SET_CONNECTION = utf8;",
+                   "\n\n"]
 
 # jsonファイルを読み込む
 with open(os.path.join(PYTHON_DIR_PATH, FILE_PATH_JSON), encoding="utf-8") as f:
