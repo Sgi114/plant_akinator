@@ -10,7 +10,6 @@ import get_selenium
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 import os
 
 
@@ -23,7 +22,7 @@ def scraping():
     # Sereniumの初期設定
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")  # Chromeウィンドウを表示せずに実行
-    # ダウンロードしたChromeDriverのパスを入力
+    options.add_argument("--log-level=3")  # ターミナルに出力しない
     driver = webdriver.Chrome(chrome_options=options,
                               executable_path=CHROME_DRIVER_PATH)
 

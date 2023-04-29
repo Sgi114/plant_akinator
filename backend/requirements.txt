@@ -8,3 +8,4 @@ mysqlclient==2.1.1
 BeautifulSoup4
 requests
 py3langid==0.2.2
+selenium==3.141.0
