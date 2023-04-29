@@ -11,6 +11,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
+from typing import Optional
 
 
 PYTHON_DIR_PATH = os.path.dirname(os.path.abspath(__file__))  # pyファイルが置かれているパス
@@ -143,7 +144,9 @@ def scraping():
     return viola_list
 
 
-def add_viola_data(viola: object, key: str, text: str) -> object:
+def add_viola_data(viola: object, key: Optional[str], text: Optional[str]) -> object:
+    if(key is None or text is None):
+        return viola
     key = key.replace("\n", "").replace("\t", "").strip()
     viola[key] = text
     return viola
