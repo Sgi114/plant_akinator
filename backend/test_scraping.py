@@ -1,4 +1,3 @@
-import requests
 from bs4 import BeautifulSoup
 import time
 import json
@@ -7,13 +6,31 @@ import minify_html
 import py3langid
 import utils
 from urllib.parse import urljoin
+import get_selenium
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+import os
+
+
+PYTHON_DIR_PATH = os.path.dirname(os.path.abspath(__file__))  # pyファイルが置かれているパス
+CHROME_DRIVER_PATH = os.path.join(
+    PYTHON_DIR_PATH, "webdriver", "chromedriver.exe")
 
 
 def scraping():
-    name_url = requests.get("http://www.io-net.com/violet/abcindex.htm")
-    name_url.encoding = name_url.apparent_encoding  # 呪文
+    # Sereniumの初期設定
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")  # Chromeウィンドウを表示せずに実行
+    # ダウンロードしたChromeDriverのパスを入力
+    driver = webdriver.Chrome(chrome_options=options,
+                              executable_path=CHROME_DRIVER_PATH)
 
-    soup = BeautifulSoup(name_url.text, 'html.parser')
+    driver.get("http://www.io-net.com/violet/abcindex.htm")
+    # すべての要素が読み込まれるまで待機：https://qiita.com/uguisuheiankyo/items/cec03891a86dfda12c9a
+    WebDriverWait(driver, 15).until(EC.presence_of_all_elements_located)
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
     tags = soup.find_all('td', class_='white')
 
     url_list = []
@@ -30,9 +47,11 @@ def scraping():
     count = 0
 
     for url in url_list:
-        ac_url = requests.get(url)
-        ac_url.encoding = ac_url.apparent_encoding  # 呪文
-        soup = BeautifulSoup(ac_url.text, 'html.parser')
+        # HTML取得
+        driver.get(url)  # URLにアクセスする
+        # すべての要素が読み込まれるまで待機：https://qiita.com/uguisuheiankyo/items/cec03891a86dfda12c9a
+        WebDriverWait(driver, 15).until(EC.presence_of_all_elements_located)
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
 
         # リンク集ページの場合はスキップ
         if ("親から検索" in soup.text):
@@ -100,10 +119,11 @@ def scraping():
                         soup = BeautifulSoup(str(child), 'html.parser')
                         span_tag = soup.find("span")
                         if (span_tag != None and span_tag.has_attr("class")):
-                            viola[key+"_"+span_tag["class"][0]] = span_tag.text
+                            viola = add_viola_data(
+                                viola, key+"_"+span_tag["class"][0], span_tag.text)
                         else:
-                            viola[key+"_" +
-                                  name_language] = str(soup.text).strip()
+                            viola = add_viola_data(
+                                viola, key+"_"+name_language, str(soup.text).strip())
                 else:
                     content_html = minify_html.minify(str(td))
                     # 正規表現で改行タグをすべて「\n」に置き換え
@@ -114,16 +134,24 @@ def scraping():
                     text = content_text.replace("\t", "").replace(
                         "\\u3000", "").strip()  # 不要な文字を削除して整形（「\u3000」は全角スペース）
                     text = re.sub("\n{2,}", "\n", text)  # 複数の改行を1つにまとめる
-                    viola[key] = text
+                    viola = add_viola_data(viola, key, text)
         viola = utils.remove_empty_keys(viola)
         viola_list.append(viola)
         count += 1
         print("✅ 完了: "+url+"（"+str(count)+"/"+str(len(url_list))+"）")
         time.sleep(0.1)  # 連続アクセス防止
+    driver.quit()  # ブラウザを閉じる
     return viola_list
 
 
+def add_viola_data(viola: object, key: str, text: str) -> object:
+    key = key.replace("\n", "").replace("\t", "").strip()
+    viola[key] = text
+    return viola
+
+
 if __name__ == "__main__":
+    get_selenium.setup()
     viola_list = scraping()
     json_text = json.dumps(viola_list, ensure_ascii=False)
     with open('violas.json', 'w', encoding="utf-8") as f:
