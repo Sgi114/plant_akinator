@@ -23,7 +23,7 @@ with open(os.path.join(PYTHON_DIR_PATH, FILE_PATH_JSON), encoding="utf-8") as f:
 
 # CREATE TABLE文を作成
 result_current_sql_list = [
-    "CREATE TABLE IF NOT EXISTS `plant_akinator`.`violas` ( id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"]
+    "CREATE TABLE IF NOT EXISTS `violas` ( id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"]
 column_name_list = []  # 列名リスト
 for data in json_data:
     for data_key in data.keys():
@@ -54,9 +54,9 @@ for data in json_data:
         if(data_key == "image_list"):
             # data[data_key]をjson文字列化
             json_str = json.dumps(data[data_key], ensure_ascii=False)
-            column_sql_list.append('`'+json_str+'`')
+            column_sql_list.append("'"+json_str.replace("\"", "''")+"'")
             continue
-        column_sql_list.append('`'+data[data_key].replace("\n", "\\n")+'`')
+        column_sql_list.append("'"+data[data_key].replace("\n", "\\n").replace("'", "''")+"'")
     result_current_sql_list.append(", ".join(column_sql_list))
     result_sql_list.append(" ".join(result_current_sql_list))
     result_sql_list.append(");")
