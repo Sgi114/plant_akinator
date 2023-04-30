@@ -11,7 +11,9 @@ stop:
 	docker-compose stop
 
 clean:
-	docker-compose down
+	make stop
+	docker rm plant_akinator-backend-1 plant_akinator-frontend-1
+	docker rmi plant_akinator-backend plant_akinator-frontend
 
 all-reset:
 	docker-compose down --rmi all --volumes --remove-orphans
