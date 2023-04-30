@@ -30,11 +30,13 @@ make stop
 ```
 
 ### 削除
+このコマンド実行後に `make start` で再起動すると 約2.8MB 通信
 ```
 make clean
 ```
 
 ### DBも含めてデータを全削除
+このコマンド実行後に `make start` で再起動すると 約395MB 通信
 ```
 make all-reset
 ```
