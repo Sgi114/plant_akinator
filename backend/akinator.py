@@ -1,41 +1,37 @@
 from flask import Flask, render_template, request, jsonify
 import random
 
-
 def akinator(db):
     data = request.get_json()
     answer = data['answer']
-    # db =  ここでデータベースに接続する
-
     if 'question' not in data:
         first_question = '茎の形態は無茎種である。'
         question = first_question
+        db.execute("CREATE TEMPORARY TABLE temp_akinator SELECT * FROM flowers")
     else:
         question = data['question']
 
-
-    
     if answer == 'Yes':
-        db.execute("UPDATE flowers SET active = 1 WHERE question = %s", (question,))
+        db.execute("DELETE FROM temp_akinator WHERE steam_type = '有茎種'")
     
     elif answer == 'No':
-        db.execute("UPDATE flowers SET active = 0 WHERE question = %s", (question,))
+        db.execute("DELETE FROM temp_akinator WHERE steam_type = '無茎種'")
 
-    result = akinator_search(db,question)
+    result = refine_search(db,question)
     return jsonify(result=result , question=question)
 
 
-def akinator_seach(db,question):
-    question = db.execute("SELECT * FROM flowers ORDER BY RAND() LIMIT 0 OFFSET FLoor(RAND() * 6)rows")[0]
+def refine_search(db,question):
+    next_question = db.execute("SELECT * FROM temp_akinator ORDER BY RAND() LIMIT 0 OFFSET FLoor(RAND() * 6)rows")[0]
     if answer == 'Yes':
-        cursor.execute("create view Akinator as select * from flowers where like %s", ('%'+question+'%',))
+        cursor.execute("DELETE FROM temp_akinator WHERE NOT LIKE %s", ('%'+question+'%',))
     elif answer == 'No':
-         cursor.execute("create view Akinator as select * from flowers where not like %s", ('%'+question+'%',))
+         cursor.execute("DELETE FROM temp_akinator WHERE LIKE %s", ('%'+question+'%',))
     result = cursor.fetchall()
   
 
     if len(result) > 1:
-         result = akinator_seach(db,question)
+         result = refine_search(db,question)
      # 結果が0件の場合は見つからなかった旨のメッセージを返す
     elif len(result) == 0:
          result =  '植物は見つかりませんでした。'
