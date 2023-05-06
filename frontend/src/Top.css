@@ -44,6 +44,8 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    align-items: center;
+    justify-content: center;
 }
 
 .top-panel,
@@ -58,6 +60,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    display: flex;
+    flex-direction: row;
 }
 
 .center-panel::before {
@@ -69,4 +73,30 @@
     right: 0;
     background-color: white;
     opacity: 0.3;
+}
+
+.card-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.card-image {
+    width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.card-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.card-button:hover {
+    background-color: #0056b3;
 }
