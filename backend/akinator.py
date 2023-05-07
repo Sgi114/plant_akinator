@@ -21,12 +21,13 @@ def akinator(db):
     return jsonify(result=result , question=question)
 
 
-def refine_search(db,question):
+def refine_search(db,next_question):
     next_question = db.execute("SELECT * FROM temp_akinator ORDER BY RAND() LIMIT 0 OFFSET FLoor(RAND() * 6)rows")[0]
     if answer == 'Yes':
-        cursor.execute("DELETE FROM temp_akinator WHERE NOT LIKE %s", ('%'+question+'%',))
+        cursor.execute("DELETE FROM temp_akinator WHERE NOT LIKE %s", ('%'+next_question+'%',))
     elif answer == 'No':
-         cursor.execute("DELETE FROM temp_akinator WHERE LIKE %s", ('%'+question+'%',))
+         cursor.execute("DELETE FROM temp_akinator WHERE LIKE %s", ('%'+next_question+'%',))
+         
     result = cursor.fetchall()
   
 
