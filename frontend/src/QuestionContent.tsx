@@ -1,4 +1,4 @@
-import { Box, Button, ButtonProps } from "@mui/material";
+import { Box, Button, ButtonProps, Typography } from "@mui/material";
 
 export const QuestionContent = () => {
   type ControlButtonProps = {
@@ -25,17 +25,22 @@ export const QuestionContent = () => {
   );
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "start",
-      }}
-    >
-      <ControlButton text="yes" sx={{ mr: 2 }} color="success" />
-      <ControlButton text="no" sx={{ mr: 2 }} color="error" />
-      {/* FIXME: themeで`neutral`を作ってそれに置き換える 参考サイト：https://mui.com/material-ui/customization/palette/ */}
-      <ControlButton text="skip" variant="outlined" color="info" />
-    </Box>
+    <>
+      <Typography variant="h2" gutterBottom sx={{ fontWeight: 500, mb: 10 }}>
+        花びらの色は濃い？
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "start",
+        }}
+      >
+        <ControlButton text="yes" sx={{ mr: 2 }} color="success" />
+        <ControlButton text="no" sx={{ mr: 2 }} color="error" />
+        {/* FIXME: themeで`neutral`を作ってそれに置き換える 参考サイト：https://mui.com/material-ui/customization/palette/ */}
+        <ControlButton text="skip" variant="outlined" color="info" />
+      </Box>
+    </>
   );
 };
