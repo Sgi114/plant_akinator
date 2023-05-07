@@ -1,4 +1,4 @@
-<br/>
+<br/><br/>
 
 <p align="center">
 <a href="https://shields.io/"><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Sgi114/plant_akinator"></a>
