@@ -16,20 +16,7 @@ export const Top = () => {
 
   return (
     <div className="container">
-      {/* <div className="top-panel"></div>
-      <div className="center-panel">
-        <img
-          src={lamp_majin}
-          alt="Akinator"
-          // style={{ paddingTop: 10, paddingBottom: 10 }}
-          height={300}
-        />
-        <div className="akinator-bubble">やあ、私はアキネイターです</div>
-        <button className="akinator-button">プレイする</button>
-      </div>
-      <div className="bottom-panel"></div> */}
       <MainCard>
-        {/* <h1 className="card-title">PlantAkinator</h1> */}
         <Typography variant="h2" gutterBottom style={{ fontWeight: 600 }}>
           PlantAkinator
         </Typography>
@@ -38,18 +25,14 @@ export const Top = () => {
             display: "flex",
             flexDirection: "row",
             alignItems: "start",
-            // justifyContent: "center",
           }}
         >
           <img src={lamp_majin} alt="character" className="card-image" />
           <Box
             sx={{
               position: "relative",
-              // bottom: "auto",
               top: 80,
               left: -30,
-              // height: 100,
-              // transform: "translateX(-50%)",
               backgroundColor: "white",
               border: "1px solid black",
               borderRadius: 5,
@@ -66,7 +49,6 @@ export const Top = () => {
               ))}
           </Box>
         </Box>
-        {/* <button className="card-button">Button</button> */}
         <Button
           variant="contained"
           size="large"
