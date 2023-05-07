@@ -1,5 +1,13 @@
 version: '3'
 services:
+  swagger:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8002:8080"
+    volumes:
+      - ./swagger.yaml:/usr/share/nginx/html/swagger.yaml
+    environment:
+      - SWAGGER_JSON=/usr/share/nginx/html/swagger.yaml
   db:
     image: mysql:8
     command: >
