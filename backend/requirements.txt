@@ -9,3 +9,5 @@ BeautifulSoup4
 requests
 jsonify
 random
+py3langid==0.2.2
+selenium==3.141.0
