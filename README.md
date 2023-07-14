@@ -89,7 +89,7 @@ npx create-react-app plant-akinator --template=typescript
 ```
 
 - Dockerについて：https://y-ohgi.com/introduction-docker/1_introduction/docker/
-- 各種すみれ
+- 各種スミレ
   - http://www.io-net.com/violet/violet2/ainu_tatitubo.htm
   - http://www.io-net.com/violet/violet3/langsdorfii.htm
   - http://www.io-net.com/violet/violet8/omiya.htm
