@@ -1,6 +1,7 @@
 version: '3'
 services:
   db:
+    container_name: plant_akinator_db
     image: mysql:8
     command: >
       --default-authentication-plugin=mysql_native_password &&
@@ -20,6 +21,7 @@ services:
       - "3306:3306"
 
   backend:
+    container_name: plant_akinator_backend
     build: ./backend
     ports:
       - "8000:8000"
@@ -33,6 +35,7 @@ services:
       - DB_PASS=sgi114
 
   phpmyadmin:
+    container_name: plant_akinator_phpmyadmin
     image: phpmyadmin/phpmyadmin
     depends_on:
       - db
@@ -47,10 +50,12 @@ services:
       - ./phpmyadmin/sessions:/sessions
 
   frontend:
+    container_name: plant_akinator_frontend
     build: ./frontend
     ports:
       - "80:4000"
     depends_on:
       - backend
+
 volumes:
   db-store:

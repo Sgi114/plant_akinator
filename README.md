@@ -52,11 +52,14 @@ make all-reset
 ```
 
 ### デバッグ
-
-参考サイト：https://zenn.dev/sinozu/articles/8c51091af73cd1b386b8
-
+#### backend
 ```
-make debug CONTAINER_ID=[デバッグしたいコンテナのID]
+make bash CONTAINER_NAME=plant_akinator_backend
+```
+
+#### frontend
+```
+make bash CONTAINER_NAME=plant_akinator_frontend
 ```
 
 ## URL

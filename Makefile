@@ -12,12 +12,11 @@ stop:
 
 clean:
 	make stop
-	docker rm plant_akinator-backend-1 plant_akinator-frontend-1
-	docker rmi plant_akinator-backend plant_akinator-frontend
+	docker-compose rm plant_akinator_frontend plant_akinator_backend
+	docker-compose rmi plant_akinator-backend plant_akinator-frontend
 
 all-reset:
 	docker-compose down --rmi all --volumes --remove-orphans
 
-debug:
-	docker commit $(CONTAINER_ID) test
-	docker run --rm -it test bash
+bash:
+	docker-compose exec $(CONTAINER_NAME) /bin/bash
