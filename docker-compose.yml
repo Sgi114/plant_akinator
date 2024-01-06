@@ -1,6 +1,6 @@
 version: '3'
 services:
-  db:
+  plant_akinator_db:
     container_name: plant_akinator_db
     image: mysql:8
     command: >
@@ -20,13 +20,13 @@ services:
     ports:
       - "3306:3306"
 
-  backend:
+  plant_akinator_backend:
     container_name: plant_akinator_backend
     build: ./backend
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - plant_akinator_db
     environment:
       - DB_HOST=db
       - DB_PORT=3306
@@ -34,11 +34,11 @@ services:
       - DB_USER=sgi
       - DB_PASS=sgi114
 
-  phpmyadmin:
+  plant_akinator_phpmyadmin:
     container_name: plant_akinator_phpmyadmin
     image: phpmyadmin/phpmyadmin
     depends_on:
-      - db
+      - plant_akinator_db
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOSTS=db
@@ -49,13 +49,13 @@ services:
     volumes:
       - ./phpmyadmin/sessions:/sessions
 
-  frontend:
+  plant_akinator_frontend:
     container_name: plant_akinator_frontend
     build: ./frontend
     ports:
       - "80:4000"
     depends_on:
-      - backend
+      - plant_akinator_backend
 
 volumes:
   db-store:
