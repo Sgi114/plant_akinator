@@ -5,7 +5,9 @@ WORKDIR /app
 
 # Copy the requirements file and install the dependencies
 COPY requirements.txt .
-RUN apt-get update -y
+
+RUN sed -i 's@archive.ubuntu.com@ftp.jaist.ac.jp/pub/Linux@g' /etc/apt/sources.list
+RUN apt-get update
 # RUN apt-get install -y gcc python-dev
 RUN apt-get install -y make automake gcc g++ subversion python3-dev default-libmysqlclient-dev
 # RUN apt-get install -y default-libmysqlclient-dev
